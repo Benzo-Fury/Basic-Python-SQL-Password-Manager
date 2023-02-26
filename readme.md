@@ -5,3 +5,5 @@
 • Runs via SQL.
 
 Feel free to use it.
+
+P.S: Admin password is "monkeys"
