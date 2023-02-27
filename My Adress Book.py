@@ -1,6 +1,8 @@
 import os
+import random
 import socket
 import sqlite3
+import string
 import sys
 import time
 
@@ -22,6 +24,13 @@ def add_password(password):
     if not website.endswith('.com'):
         print('Website MUST end with ".com"')
         abort_process()
+    c.execute("SELECT * FROM passwords WHERE website = ?", (website,))
+    result = c.fetchone()
+    if result:
+        print('That password already exists.')
+        time.sleep(2)
+        os.system('cls')
+        return
     email = input("Enter email: ")
     if not email.endswith('.com'):
         print('Email must end with .com')
@@ -111,6 +120,15 @@ def password_strength(password):
             abort_process()
 
 
+def generate_password(length):
+    special_chars = (random.choice(["!@#$%^&*()_+{}:\"<>?,./;'[]"]) for i in range(length))
+    letters_lower = (random.choice(string.ascii_lowercase) for i in range(length))
+    letters_upper = (random.choice(string.ascii_uppercase) for i in range(length))
+    result_str = ''.join(letters_lower) + ''.join(letters_upper) + ''.join(special_chars)
+    shuffle = random.sample(result_str, len(result_str))
+    return ''.join(shuffle)
+
+
 while True:
     print("""
     Password Manager Menu:
@@ -132,12 +150,16 @@ while True:
             query = input("Enter search: ")
             search_passwords(query)
         case '3':
-            psd = input('Enter your password: ')
+            psd = input('Enter your password or enter 1 to auto generate: ')
+            if psd == '1':
+                psd = generate_password(4)
             password_strength(psd)
             add_password(psd)
             os.system('cls')
         case '4':
-            psd = input('Enter your password: ')
+            psd = input('Enter your password or enter 1 to auto generate: ')
+            if psd == '1':
+                psd = generate_password(4)
             password_strength(psd)
             update_password(psd)
         case '5':
