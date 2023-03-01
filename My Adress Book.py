@@ -11,11 +11,27 @@ connection = sqlite3.connect('database.db')
 c = connection.cursor()
 
 
+# MISC FUNCTIONS
+
+
 def abort_process():
     # function to abort the process
     print('Aborting process')
     time.sleep(2)
     sys.exit()
+
+
+def generate_password(length):
+    # generates a strong password
+    special_chars = (random.choice(["!@#$%^&*()_+{}:\"<>?,./;'[]\\"]) for _ in range(length))
+    letters_lower = (random.choice(string.ascii_lowercase) for _ in range(length))
+    letters_upper = (random.choice(string.ascii_uppercase) for _ in range(length))
+    result_str = ''.join(letters_lower) + ''.join(letters_upper) + ''.join(special_chars)
+    shuffle = random.sample(result_str, len(result_str))
+    return ''.join(shuffle)
+
+
+# PASSWORD FUNCTIONS
 
 
 def add_password(password):
@@ -43,8 +59,8 @@ def add_password(password):
 
 
 def show_passwords():
-    # function to list all of the stored passwords
-    # TODO: change format of outputted results.
+    # function to list all the stored passwords
+
     check_password = input('Input admin password: ')
     if check_password != 'monkeys':
         print('Wrong password')
@@ -103,6 +119,9 @@ def delete_password():
         os.system('cls')
 
 
+# Checks and misc
+
+
 def password_strength(password):
     # function to check the strength of the inputted password
     if len(password) < 5:
@@ -116,16 +135,6 @@ def password_strength(password):
         else:
             print('Your password must contain at least 1 special character')
             abort_process()
-
-
-def generate_password(length):
-    # generates a strong password
-    special_chars = (random.choice(["!@#$%^&*()_+{}:\"<>?,./;'[]\\"]) for _ in range(length))
-    letters_lower = (random.choice(string.ascii_lowercase) for _ in range(length))
-    letters_upper = (random.choice(string.ascii_uppercase) for _ in range(length))
-    result_str = ''.join(letters_lower) + ''.join(letters_upper) + ''.join(special_chars)
-    shuffle = random.sample(result_str, len(result_str))
-    return ''.join(shuffle)
 
 
 while True:
